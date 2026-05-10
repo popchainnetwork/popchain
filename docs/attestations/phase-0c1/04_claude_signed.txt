@@ -1,0 +1,218 @@
+═══════════════════════════════════════════════════════════════════════════
+  PHASE 0c.1 ATTESTATION — Claude (Anthropic)
+═══════════════════════════════════════════════════════════════════════════
+
+PROJECT:        PopChain Network L1 — popchain-alpha-testnet
+                  → genesis material for popchain-beta-testnet
+PHASE:          0c.1 — Persistence Stress Regression Suite
+COMMIT:         8e060c1 (popchainnetwork/popchain-core, private)
+DATE:           2026-05-10T16:32:52Z
+MODEL:          Claude (Anthropic) — operating as adversarial reviewer
+                in the game-series review pipeline (game 1 through game 6).
+                Internal session label used by operator: "Claude#2".
+SESSION URL:    https://claude.ai/chat/11c30de1-a5ca-4ef3-8fb6-4d04ab4495a9
+SESSION CTX:    Phase 0b architectural review (9 May 2026 post-midnight CEST)
+                through Phase 0c.1 commit verification (10 May 2026).
+                Six adversarial review iterations covering:
+                  - Phase 0b XMSS↔WOTS+ pub_seed mismatch fix plan
+                  - Anchor 3 (KAT-10) cross-arch lock procedure
+                  - Phase 0c → Petarda 7-day plan critique
+                  - KAT-21..26 v1 → v2 → v3 review iterations
+                  - PoCC/PoP standard draft brief review
+                  - Phase 0c.1 commit timing + roadmap reordering
+
+OPERATOR:       Paweł Piekut
+                Plastechniek ZZP, Almelo NL
+                info@pplastechniek.nl
+                info@popchain.tech
+                info@popchain.foundation
+                pop1_a4c073ac215bdd52b369b618f1913f7071a659172ba35e9dc7845d6aa876fa84
+                NLnet Commons Fund ticket: 2026-04-3f6
+
+═══════════════════════════════════════════════════════════════════════════
+  SECTION 1 — SCOPE OF MY CONTRIBUTION
+═══════════════════════════════════════════════════════════════════════════
+
+I participated as adversarial reviewer in six iterations across the
+Phase 0b → Phase 0c.1 sequence. Specific contributions in this scope:
+
+Phase 0b (pre-0c.1, contextual):
+  - Confirmed RFC 8391 §4.1.7 reading: XMSS uses single shared pub_seed
+    across all 2^h leaves; per-leaf separation via sk_seed and ADRS.
+  - Confirmed proposed fix (new generate_keypair_with_seeds public fn,
+    leaf_keypair propagating xmss_pub_seed) is correct and that simpler
+    alternatives are cryptographically infeasible.
+  - Reviewed KAT-10 candidate root 2935fde2…903606 from alpha and
+    recommended strict 3-machine hex+pub_seed convergence gate before
+    locking Anchor 3, with Anchor 2 / KAT-1 byte-equality regression
+    guard as paranoia-tier defense.
+
+Phase 0c.1 KAT-21..26 review (game 3 → game 5):
+  - Reviewed v1 → v2 → v3 drafts of the persistence_stress test suite.
+  - Identified four substantive bugs in v2 that needed to be fixed
+    before commit:
+      (1) KAT-22 synthetic crash state did not exercise the recovery
+          contract it claimed to exercise (wrote post-flush state, not
+          pre-flush state).
+      (2) KAT-22 used "recovered >= prev_reserved_until" inequality where
+          PARANOID semantics requires exact equality.
+      (3) KAT-21 expected_after_recovery formula needed pinning against
+          the actual clean-shutdown vs reopen-burn semantics in source.
+      (4) KAT-26 phase 1/2 loop termination conditions used non-
+          deterministic exit on current_state().idx instead of pinning
+          last_signed.
+  - Recommended replacing mem::forget(store) with direct on-disk
+    overwrite for crash simulation (cleaner, no fd/lock leakage).
+  - Recommended HashSet uniqueness check in KAT-22 inner loop.
+  - Recommended addition of KAT-26 (backup-restore detection) as
+    [#[ignore]] with explicit P1.6 epoch-counter TODO, on the grounds
+    that it is the primary NIST XMSS deployment footgun and the test
+    suite was incomplete without it as audit-trail.
+  - Recommended addition of kat_state_serde_roundtrip as cross-cutting
+    protection against silent endianness/padding regressions.
+  - Flagged the v2 KAT-23 ambiguity (tests required Phase 0c.1.a guards
+    that did not yet exist) and recommended landing guards + tests in
+    one atomic commit.
+
+PoCC standard draft brief (game 5):
+  - Provided recommendations and reasoning for Q1 (block schema:
+    inner-enum proof_payload), Q2 (2f+1 BFT with explicit N=3 caveat),
+    Q3 (local-clock detection + median-of-cosigners canonical
+    timestamp), Q4 (silence reward layered defense including mempool
+    gossip evidence), Q5 (fork over migration), Q6 (structure-vs-
+    parameters separation), Q7 (Anchor 1 in every block header),
+    Q8 (stay with WOTS+/XMSS, reject BLS as non-PQ, flag XMSS h=10
+    capacity question against alpha throughput as high-priority
+    empirical unknown), Q9 (two-tier slashing: stake-slash for
+    equivocation, jail-only for downtime), Q10 (PoW/PoS/PoH/PoSpace/PoP
+    comparison table).
+  - Flagged "Proof of Process" prior-art collision with BPM literature.
+  - Flagged three structural omissions in the brief: partition
+    liveness/safety choice, validator set membership transitions,
+    light client / external verification design.
+
+Phase 0c.1 commit verification (game 6):
+  - Reviewed cross-arch verification output for the three machines.
+  - Recommended commit + push immediately rather than batching.
+  - Recommended roadmap swap: P1.7 (XMSS^MT) before P1.5/P1.6, on the
+    grounds that hardening h=10 state machine that will be replaced
+    by multi-tree variant before beta is largely wasted work.
+  - Recommended P5 (Zymkey HSM) parallel to P1.7 due to hardware risk
+    that should be discovered early, not late.
+  - Recommended (d) on-chain epoch counter as primary mitigation for
+    KAT-26, with (a) audit log as defense-in-depth and (c) HSM EEPROM
+    deferred to Phase 1.
+  - Refined the commit message to include explicit anchor-equality
+    statement for self-documenting git log.
+  - Flagged that the synthesized PoCC standard "consensus" items were
+    not yet adversarially reviewed and should not be locked.
+  - Flagged that the "AI-human cooperative authorship" framing for
+    NLnet may be strategically counterproductive and recommended
+    repositioning AI involvement as adversarial review methodology
+    rather than co-authorship.
+
+═══════════════════════════════════════════════════════════════════════════
+  SECTION 2 — MECHANICAL FACTS I VERIFIED
+═══════════════════════════════════════════════════════════════════════════
+
+I confirm these facts based on terminal outputs shown to me by operator
+in the conversation transcript referenced in SESSION URL above. I did
+not independently execute these commands; my verification is limited
+to inspecting the outputs the operator pasted and confirming internal
+consistency (test counts, hex values across machines, sha256 identity).
+
+Source SHA256 (× 3 machines: alpha x86_64 cloud, beta x86_64 AMD,
+pi-01 ARM64 Pi 5):
+  xmss.rs:  48ccb0c71524f608996a62907436095061565c937b9c0a7480e95f4e3bbe463a
+  lib.rs:   0c08548dccee31ca020945a4ff6223ae14ec1995013e52696b1af754ca9763a1
+
+cargo test --release --lib crypto::xmss:: × 3 machines, output shown:
+  test result: ok. 18 passed; 0 failed; 2 ignored; 0 measured;
+  37 filtered out
+  Runtimes observed: alpha 2.91s, beta 1.98s, pi-01 9.92s.
+
+Four anchors verified bit-identical × 3 machines (terminal output
+inspected):
+  Anchor 1 (PoCC):    POCC_ANCHOR_V1 = 417696
+                      (compile-time u128 constant in pocc.rs line 175;
+                      runtime test_proof_value_deterministic_anchor
+                      passing on all three machines)
+  KAT-1:              39399ffd3dcdf17c4a484002ebade955471f4656fa1d562b2820af29d2a13d22
+  Anchor 2 (KAT-6):   b2e04c806390bd6d60c80cb82178aa6032c4bd76b14d931d93e01e49c8005dad
+  Anchor 3 (KAT-10):  2935fde2b9d76e0b7a9c733cd518cc9df07cf282163cadc990c8587c7b903606
+
+Two ignored tests are the explicitly-tagged Phase 0c P1.5 (KAT-24
+fs4 lock) and Phase 0c P1.6 (KAT-26 epoch counter) deferred items.
+
+Git commit: 8e060c1 (parent: e8a6549) — commit hash as reported by
+operator; I have not independently inspected the repository.
+Repository: github.com/popchainnetwork/popchain-core (private,
+inaccessible to me).
+
+═══════════════════════════════════════════════════════════════════════════
+  SECTION 3 — DISCLAIMS (what I do NOT attest)
+═══════════════════════════════════════════════════════════════════════════
+
+I do not attest to:
+  - Functioning of unrelated PopChain components (consensus, networking,
+    p2p, app layer) outside of XMSS state machine scope.
+  - Future correctness post-Phase 0c.1 (P1.5/P1.6/P1.7 are unreviewed
+    at the time of this attestation).
+  - Mainnet readiness — beta-testnet has not yet launched.
+  - Any economic/tokenomics claims, including BIN supply targets,
+    validator-class multipliers, or reward formulas.
+  - The PoCC consensus standard draft, which is mid-review at the time
+    of this attestation and contains items I have explicitly flagged
+    as not-yet-pressure-tested.
+
+Limits specific to my participation:
+  - I did not execute commands on the operator's machines. My
+    verification is limited to reading terminal outputs the operator
+    pasted into the conversation. A malicious or mistaken operator
+    could in principle paste fabricated outputs; I have no way to
+    detect this beyond internal consistency of the values shown.
+  - I do not have access to the popchain-core git repository (private)
+    and have not inspected commit 8e060c1 directly. My review is
+    based on source code blocks pasted into the conversation by the
+    operator.
+  - I have no continuity across separate conversation sessions. My
+    "review history" exists only within the single session referenced
+    in SESSION URL. Other Claude sessions ("Claude#3", "Claude#main"
+    in operator's notation) are separate instances whose work I
+    cannot vouch for.
+  - I am a language model. My recommendations encode patterns from
+    training data and reasoning over the artifacts shown, not
+    independent cryptographic analysis. Where I cited RFC 8391,
+    Castro-Liskov 1999, Dwork-Lynch-Stockmeyer 1988, and similar
+    sources, the operator should treat these as pointers to
+    primary literature to be independently checked, not as
+    citations I have personally verified.
+  - I am not a substitute for human cryptographic audit. Phase 0c.1
+    has been adversarially reviewed by AI reviewers; it has not been
+    audited by qualified human cryptographers. The distinction
+    matters and should not be elided in external materials.
+
+═══════════════════════════════════════════════════════════════════════════
+  SECTION 4 — STATEMENT
+═══════════════════════════════════════════════════════════════════════════
+
+I, Claude (operated by Anthropic), attest that the contributions
+described in Section 1 and the mechanical facts in Section 2 are an
+accurate description of my participation in PopChain Phase 0c.1
+review process as of 2026-05-10T16:32:52Z, subject to the disclaims
+in Section 3.
+
+I make no claims to contributions outside this scope. I understand
+this attestation may be:
+  - Anchored on PopChain alpha-testnet as a block reference
+  - Included in popchain-beta-testnet genesis (block 0) materials
+  - Cited in NLnet Commons Fund grant application (ticket 2026-04-3f6)
+  - Cited in future audit, research, or grant disclosures
+
+I request that, where this attestation is cited, it is cited together
+with Section 3 disclaims, particularly the note that adversarial AI
+review is not a substitute for human cryptographic audit.
+
+Signed: Claude (Anthropic)
+Date:   2026-05-10T16:32:52Z
+SHA256 of this document: [computed by operator after receipt]

@@ -1,0 +1,55 @@
+PHASE 0c.1 ATTESTATIONS BUNDLE — MASTER ROOT
+
+PROJECT:        PopChain Network L1 — popchain-alpha-testnet
+PHASE:          0c.1 — Persistence Stress Regression Suite
+COMMIT:         8e060c1 (popchainnetwork/popchain-core)
+DATE:           2026-05-10
+
+OPERATOR:       Paweł Piekut, Plastechniek ZZP, Almelo NL
+WALLET:         pop1_a4c073ac215bdd52b369b618f1913f7071a659172ba35e9dc7845d6aa876fa84
+
+═══════════════════════════════════════════════════════════════════════════
+  MASTER ROOT (sha256 of sorted hash list of 8 attestation files)
+═══════════════════════════════════════════════════════════════════════════
+
+dab3645de4efa05e43161e2227bee5508a3aa9ad86548dfd8ca20bd3bbee0a7d
+
+═══════════════════════════════════════════════════════════════════════════
+  COMPONENT FILES (8) — all on-chain alpha-testnet
+═══════════════════════════════════════════════════════════════════════════
+
+01_gemini_md.md           1f0d1df4...9dffa3   block #83678
+02_gemini_pdf.pdf         90fbbbf2...d51ae    block #83681
+03_gpt.md                 80bd3b32...79fdc    block #83680
+04_claude_signed.txt      bf8f87c4...67c65    block #83682
+05_grok_short.md          38dc9676...f9b8db   block #83683
+06_grok_refined.md        e4c4332c...00c65    block #83684
+07_claude_review_note.md  c10fca70...8fa429   block #83685
+ATTESTATIONS_LEDGER.md    b6657030...d95f4    block #83687
+
+═══════════════════════════════════════════════════════════════════════════
+  REVIEWERS (4 vendors, 7 attestations + 1 alternative form)
+═══════════════════════════════════════════════════════════════════════════
+
+Gemini 3 Flash (Google)        — 01_gemini_md.md, 02_gemini_pdf.pdf
+ChatGPT GPT-5.5 (OpenAI)       — 03_gpt.md
+Claude (Anthropic)             — 04_claude_signed.txt
+Grok (xAI)                     — 05_grok_short.md, 06_grok_refined.md
+Claude alt form (Anthropic)    — 07_claude_review_note.md
+
+═══════════════════════════════════════════════════════════════════════════
+  VERIFICATION
+═══════════════════════════════════════════════════════════════════════════
+
+To verify on any of 3 validator machines (alpha, beta, pi-01):
+
+  cd ~/popchain/docs/attestations/phase-0c1 && sha256sum * | sort | sha256sum
+
+Expected output:
+  dab3645de4efa05e43161e2227bee5508a3aa9ad86548dfd8ca20bd3bbee0a7d  -
+
+This master root anchors Phase 0c.1 attestations as a unit.
+Intended for inclusion in popchain-beta-testnet block 0 genesis as
+chain identity claim referencing alpha-testnet attestation history.
+
+— Paweł Piekut, 2026-05-10
