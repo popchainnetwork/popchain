@@ -1,0 +1,53 @@
+{
+  "experiment_id": "r-process-v1-MEGA",
+  "experiment_number": "002",
+  "protocol_note": "research-probe-not-attestation",
+  "date_utc": "2026-05-11",
+  "hardware_profile": {
+    "gpu_family": "NVIDIA Ampere",
+    "gpu_model_used": "RTX 3060 12GB",
+    "cuda_runtime": "12.9",
+    "compute_library": "CuPy 14.0.1 (custom CUDA C kernel via RawKernel)"
+  },
+  "workload_specification": {
+    "n_particles": 1000000,
+    "n_steps": 10000,
+    "snapshot_every": 100,
+    "seed": 29246651490,
+    "seed_label": "chain_mbw_v0",
+    "a_min": 56,
+    "a_max": 280,
+    "fission_threshold": 240,
+    "magic_bonus": 0.5,
+    "p_fission": 0.15,
+    "atomic_discipline": "none-required (custom CUDA kernel element-wise per-particle)"
+  },
+  "canonical_outputs": {
+    "main_run_final_hash": "964675b8799786e1f7a44c5a0193d09768e520c42d7c8fb2088792baef0efcf9"
+  },
+  "determinism_stress": {
+    "n_runs": 5,
+    "all_match": true,
+    "common_hash": "44db2a94694552918872e56169bbe30efc1e9305cf6ba12d77506d71273d820c"
+  },
+  "cross_seed_sanity": {
+    "all_distinct": true,
+    "results": {
+      "chain_mbw_v0_29246651490":           "44db2a94694552918872e56169bbe30efc1e9305cf6ba12d77506d71273d820c",
+      "pocc_anchor_417696":                 "ea51aef714c0310a8ebec1f7098dd9c85b226c6e4eff403068a83f075775fa5f",
+      "kat6_prefix_0xb2e04c806390bd6d":     "4b128bbd71749853b1f7a931db242e12a1f323151fab9fa1ec963e30bca2afac"
+    }
+  },
+  "performance_summary": {
+    "main_run_duration_seconds": 6.46,
+    "main_run_throughput_particle_steps_per_sec": 1547000000,
+    "compute_kernel_benchmark_gops_per_sec": 1.12
+  },
+  "physics_summary": {
+    "A_final_mean": 192.0,
+    "A_final_max": 245,
+    "A_final_min": 110,
+    "A_final_std": 27.6,
+    "abundance_peak_region": "A in [195, 205]"
+  }
+}

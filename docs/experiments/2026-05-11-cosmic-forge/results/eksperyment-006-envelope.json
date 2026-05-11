@@ -1,0 +1,134 @@
+{
+  "experiment_id": "maximum-chaos-generator-v0",
+  "experiment_number": "006",
+  "protocol_note": "research-probe-not-attestation",
+  "purpose": "investigate emergent statistical observables in strongly-coupled chaotic multi-physics system seeded from canonical PopChain anchors",
+  "date_utc": "2026-05-11",
+  "hardware_profile": {
+    "gpu_family": "NVIDIA Ampere",
+    "gpu_model_used": "RTX 3060 12GB",
+    "cuda_runtime": "12.9",
+    "compute_library": "CuPy 14.0.1 (custom CUDA C kernels via RawKernel)"
+  },
+  "workload_specification": {
+    "n_universes": 6,
+    "universe_seeds_ordered": [
+      {"name": "chain_mbw_v0",    "seed": 29246651490},
+      {"name": "pocc_anchor",     "seed": 417696},
+      {"name": "kat6_prefix",     "seed_hex": "0xb2e04c806390bd6d"},
+      {"name": "kat10_xmss_root", "seed_hex": "0x2935fde2b9d76e0b"},
+      {"name": "kat1_prefix",     "seed_hex": "0x39399ffd3dcdf17c"},
+      {"name": "anchor_state",    "seed_hex": "0x41d7ebf3e3c96685"}
+    ],
+    "n_particles_per_universe": 2500000,
+    "n_dm_per_universe": 375000,
+    "n_steps": 500,
+    "snapshot_every": 25,
+    "mixing_every": 50,
+    "mixing_fraction": 0.005,
+    "chaos_amplifiers": [
+      "stochastic resonance noise in gravity (P_RESONANCE_NOISE=0.02)",
+      "non-linear density feedback in r-process (P_FEEDBACK=0.10, boost up to 3x)",
+      "self-organized criticality sandpile avalanches (P_SOC_AVALANCHE=0.15, threshold=50)",
+      "strange chemistry isospin flips at double-magic (rare events)",
+      "stronger gravity (G_TOY=3e-5, 3x v4)",
+      "stronger B-field (B_INIT_SCALE=0.05, 5x v4)",
+      "wider fission fragment spread (delta range [-15, 15])",
+      "aggressive multi-universe mixing (5x v4 rate, 5x v4 fraction)"
+    ],
+    "atomic_discipline": "INT64 throughout for GPU state"
+  },
+  "canonical_outputs": {
+    "multiverse_state_hash": "24655fcaed3aab576fdb2dee9e752b43671e77b83e4de87071dd4714528b967c",
+    "universe_state_hashes": {
+      "chain_mbw_v0":    "39b0011db695396aec7bebbbb62f1126a9581a2f605a35977cef3db0b4249df3",
+      "pocc_anchor":     "31a81875d01422b382550fa782fd65dd3730e55c60c62996a8b42ab455869b45",
+      "kat6_prefix":     "be3ffd55e6d13946c6fc285a27ec15de3a8148881816ba1fae99848a71685779",
+      "kat10_xmss_root": "c7cdcf23c8111683cab611d7030da78af37b9df4dea33846d9f0747ad1cfb925",
+      "kat1_prefix":     "6e6e264feefd5617851e201cc200da022cefb6f3b0ace7b54816209da978dbec",
+      "anchor_state":    "05620e8fe52bc37baea12e260d893c64f3133440f64b7d3da074d167cefd1ba9"
+    }
+  },
+  "emergent_statistics_observed": {
+    "power_law_alpha_A_distribution_per_universe": {
+      "chain_mbw_v0":    {"alpha": 2.080, "r_squared": 0.633},
+      "pocc_anchor":     {"alpha": 2.049, "r_squared": 0.641},
+      "kat6_prefix":     {"alpha": 2.123, "r_squared": 0.623},
+      "kat10_xmss_root": {"alpha": 2.016, "r_squared": 0.646},
+      "kat1_prefix":     {"alpha": 2.024, "r_squared": 0.643},
+      "anchor_state":    {"alpha": 2.021, "r_squared": 0.644}
+    },
+    "power_law_alpha_mean_across_universes": 2.052,
+    "power_law_alpha_std_across_universes": 0.038,
+
+    "cluster_size_power_law_r_squared_per_universe": {
+      "chain_mbw_v0":    {"alpha": 0.140, "r_squared": 0.982},
+      "pocc_anchor":     {"alpha": 0.146, "r_squared": 0.995},
+      "kat6_prefix":     {"alpha": 0.200, "r_squared": 0.993},
+      "kat10_xmss_root": {"alpha": 0.150, "r_squared": 0.963},
+      "kat1_prefix":     {"alpha": 0.103, "r_squared": 0.992},
+      "anchor_state":    {"alpha": 0.116, "r_squared": 0.970}
+    },
+    "cluster_size_r_squared_mean": 0.983,
+
+    "fractal_dimension_per_universe": {
+      "chain_mbw_v0":    2.664,
+      "pocc_anchor":     2.662,
+      "kat6_prefix":     2.669,
+      "kat10_xmss_root": 2.662,
+      "kat1_prefix":     2.665,
+      "anchor_state":    2.666
+    },
+    "fractal_dimension_mean": 2.665,
+    "fractal_dimension_std": 0.0026,
+    "fractal_dimension_relative_variation_percent": 0.10,
+
+    "shannon_entropy_final_per_universe_bits": {
+      "chain_mbw_v0":    5.939,
+      "pocc_anchor":     5.937,
+      "kat6_prefix":     5.937,
+      "kat10_xmss_root": 5.938,
+      "kat1_prefix":     5.934,
+      "anchor_state":    5.937
+    },
+    "shannon_entropy_mean_bits": 5.937,
+    "shannon_entropy_std_bits": 0.0017,
+    "shannon_entropy_relative_variation_percent": 0.03,
+
+    "kl_divergence_step_to_step": {
+      "all_universes_initial": "0.619 to 0.623",
+      "all_universes_final":   "0.012",
+      "decay_factor":          50,
+      "interpretation":        "attractor convergence"
+    },
+
+    "cross_universe_kl_divergence_final": {
+      "all_pairs_observed":     "0.000 to 0.001",
+      "interpretation":         "macroscopic ergodicity: 6 distinct microstates converge to one macrostate"
+    },
+
+    "energy_drift_per_universe_percent": {
+      "chain_mbw_v0":    51.19,
+      "pocc_anchor":     51.30,
+      "kat6_prefix":     51.44,
+      "kat10_xmss_root": 51.33,
+      "kat1_prefix":     51.45,
+      "anchor_state":    51.34
+    },
+    "energy_drift_mean_percent": 51.34,
+    "energy_drift_std_percent": 0.10,
+    "interpretation": "consistent thermodynamic pumping from chaos amplifiers; system is open (not isolated)"
+  },
+  "determinism_stress": {
+    "n_runs": 2,
+    "all_match": false,
+    "note": "GPU state integer-atomic discipline is preserved. The determinism breaking originates in CPU-side detector analysis (numpy float operations on quadrupole tensors, box-counting, etc). Per-universe state hashes (derived from INT64 GPU state) ARE reproducible; emergent statistics from the detector layer show small float drift."
+  },
+  "performance_summary": {
+    "duration_seconds": 60.31,
+    "throughput_particle_steps_per_sec": 124400000,
+    "total_particle_steps": 7500000000,
+    "n_kernels": 14
+  },
+  "scientific_value": "Empirical observation of cross-universe macroscopic universality (power-law exponent, fractal dimension, Shannon entropy) with sub-percent variance across 6 distinct PopChain anchor seeds. Reported as observation of the model, not of physical universe."
+}

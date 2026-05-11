@@ -1,0 +1,48 @@
+{
+  "experiment_id": "hypermassive-multiphysics-collider-v0",
+  "experiment_number": "003",
+  "protocol_note": "research-probe-not-attestation",
+  "purpose": "non-determinism falsification baseline (deliberately uses float atomicAdd)",
+  "date_utc": "2026-05-11",
+  "hardware_profile": {
+    "gpu_family": "NVIDIA Ampere",
+    "gpu_model_used": "RTX 3060 12GB",
+    "cuda_runtime": "12.9",
+    "compute_library": "CuPy 14.0.1 (custom CUDA C kernels via RawKernel)"
+  },
+  "workload_specification": {
+    "n_particles": 10000000,
+    "n_steps": 1000,
+    "snapshot_every": 50,
+    "seed": 29246651490,
+    "seed_label": "chain_mbw_v0",
+    "physics_streams_count": 6,
+    "physics_streams": [
+      "r-process nucleosynthesis",
+      "N-body gravity (grid-sampled)",
+      "Beta-delayed neutron emission",
+      "Alpha decay cascade",
+      "Quantum phase coherence",
+      "Gravitational wave quadrupole"
+    ],
+    "atomic_discipline": "FLOAT atomicAdd (intentional violation of PCIP-0010 proposed §6.4.1)",
+    "violated_design_rule": "uses atomicAdd on float32 cell_mass, cell_com, quadrupole tensor"
+  },
+  "canonical_outputs": {
+    "determinism_check_status": "FAIL_BY_DESIGN",
+    "note": "This experiment is the canonical falsification baseline. Three runs with the same seed MUST produce three distinct envelope hashes when float atomicAdd is used."
+  },
+  "determinism_stress": {
+    "n_runs": 3,
+    "all_match": false,
+    "unique_hashes": 3,
+    "note": "Distinct hashes are the expected outcome. Exact values vary per run due to non-deterministic warp scheduling."
+  },
+  "performance_summary": {
+    "duration_seconds": 63.46,
+    "throughput_particle_steps_per_sec": 157600000,
+    "event_horizon_cell_events_total": 27286,
+    "max_cell_population_observed": 29201
+  },
+  "scientific_value": "Establishes empirical necessity of integer atomic discipline. See DETERMINISM-RULE.md for derived PCIP-0010 §6.4.1 amendment."
+}

@@ -1,0 +1,74 @@
+{
+  "experiment_id": "multiverse-collider-v4",
+  "experiment_number": "005",
+  "protocol_note": "research-probe-not-attestation",
+  "purpose": "demonstrate deterministic multi-universe compute proof at scale, 12 physics streams per universe",
+  "date_utc": "2026-05-11",
+  "hardware_profile": {
+    "gpu_family": "NVIDIA Ampere",
+    "gpu_model_used": "RTX 3060 12GB",
+    "cuda_runtime": "12.9",
+    "compute_library": "CuPy 14.0.1 (custom CUDA C kernels via RawKernel)"
+  },
+  "workload_specification": {
+    "n_universes": 4,
+    "universe_seeds_ordered": [
+      {"name": "chain_mbw_v0",    "seed": 29246651490},
+      {"name": "pocc_anchor",     "seed": 417696},
+      {"name": "kat6_prefix",     "seed_hex": "0xb2e04c806390bd6d"},
+      {"name": "kat10_xmss_root", "seed_hex": "0x2935fde2b9d76e0b"}
+    ],
+    "n_particles_per_universe": 2500000,
+    "n_dm_per_universe": 250000,
+    "n_steps": 500,
+    "snapshot_every": 25,
+    "mixing_every": 100,
+    "mixing_fraction": 0.001,
+    "physics_streams_count": 12,
+    "physics_streams": [
+      "r-process nucleosynthesis",
+      "N-body gravity (grid-sampled)",
+      "Beta-delayed neutron emission",
+      "Alpha decay cascade",
+      "Quantum phase coherence",
+      "Event horizon detection",
+      "Gravitational wave quadrupole",
+      "Neutrino flavor oscillations (3-flavor PMNS + MSW)",
+      "Magnetohydrodynamics (Lorentz force + B reconnection)",
+      "Dark matter coupling (gravity-only)",
+      "Photon transport (per-cell emission counting)",
+      "Spacetime curvature (GR weak-field time dilation)"
+    ],
+    "atomic_discipline": "INT64 throughout (compliant with PCIP-0010 proposed §6.4.1)",
+    "kernels_total": 15
+  },
+  "canonical_outputs": {
+    "multiverse_master_root": "252ba3c4b3ac93b0afeccc65bf74c9865327d95e74bd77232ada1167be40fae2",
+    "universe_merkle_roots": {
+      "chain_mbw_v0":    "1c2982432a5acb44d4e6cdf349aa80ccd8f23ef6da4b8765ac5ea30a1b0ba960",
+      "pocc_anchor":     "72cee9d0b038aff1496180c5d13362d8b82af2c7d49462b235bab326464e651c",
+      "kat6_prefix":     "3014d92dba094caba092c1aad8448595d18ee3894dadbad1136206053f3ce6f2",
+      "kat10_xmss_root": "55da9144cacf591ff12b90eae7f600af4aa75bf79e687b88225d7b7fc6897217"
+    }
+  },
+  "determinism_stress": {
+    "n_runs": 3,
+    "all_match": true,
+    "common_hash": "2dc033872a18d277b0b86d9243392815f15ee9aeb914958691cc9ac51c6803dd",
+    "note": "48 distinct deterministic processes (4 universes x 12 streams) composing to bit-identical multiverse root"
+  },
+  "performance_summary": {
+    "duration_seconds": 63.09,
+    "throughput_particle_steps_per_sec": 79200000,
+    "total_particle_steps": 5000000000,
+    "max_gpu_temperature_C": 60,
+    "max_vram_used_MiB_estimate": 3500
+  },
+  "physics_summary": {
+    "evolution": "A_mean grows from 56 to 90 across 500 steps with multi-universe mixing",
+    "max_cell_population": 9641,
+    "event_horizon_total_cell_events": 4000,
+    "density_structure": "non-uniform clusters formed in each universe; mixing preserved seed-distinct microstructure"
+  },
+  "scientific_value": "Demonstrates that multi-physics, multi-universe compute proofs scale: 48 deterministic processes composing to single Merkle root. Establishes per-stream and per-universe witnessing patterns for T2/T3/T4 tier hierarchy (PCIP-0011)."
+}
